@@ -1,0 +1,82 @@
+﻿@model MySudoku.Model.FullBoard
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7">
+            <div>
+
+                @using (Html.BeginForm("UpdateGame", "Game", FormMethod.Post, new { name = "updateForm", autocomplete = "off" }))
+                {
+                    int boardSize = Model.BoardSize;
+                    int blockSize = Model.BlockSize;
+                    var tbConfig = new { maxlength = "1", size = "1", autocomplete = "off", @onkeyup = "SubmitValidCellValue(event)" };
+                    @Html.HiddenFor(m => m.BoardNumber)
+
+                    for (int x = 0; x < boardSize; x++)
+                    {
+                        if ((x != 0) && (x % blockSize == 0))
+                        {
+                            @:<br />
+                        }
+
+                        for (int y = 0; y < boardSize; y++)
+
+                        {
+                            if ((y != 0) && (y % blockSize == 0))
+                            {
+                                @:&nbsp;
+                            }
+                            var index = x * boardSize + y;
+                            <input type="text" maxlength="1" size="1" autocomplete="off" onkeyup="SubmitValidCellValue(event)" name="BoardList[@index].Value" value="@Model.BoardList[index].Value" />
+                            @Html.HiddenFor(m => m.BoardList[index].XCoordinate)
+                            @Html.HiddenFor(m => m.BoardList[index].YCoordinate)
+                            @Html.HiddenFor(m => m.BoardList[index].BlockNumber)
+                        }
+                        <br />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-3">
+            @Html.Partial("_SaveButtonView")
+            <hr />
+            <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("NewGame", "Game")'">New Game</button>
+            <hr />
+            <button type="button" class="btn btn-primary" id="btnsave">Save Game</button>
+            <hr />
+            <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("LoadGame", "Game")'">Load Saved Game</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function SubmitValidCellValue(event) {
+            var value = event.currentTarget.value;
+            if ((value == "") || (1 <= value && value <= 9)) {
+                document.updateForm.submit();
+            } else {
+                // If invalid, clear out value on screen
+                event.currentTarget.value = "";
+            }
+        }
+        $(document).ready(function () {
+            $("#btnsave").on('click', function (e) {
+
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+
+                var form = $('form[name=updateForm]');
+                var actionUrl = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: "/Game/Save",
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data) {
+                        alert(data.msg);
+                    }
+                });
+
+            });
+        })
+    </script>
+}

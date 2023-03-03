@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to my Sudoku</h1>
+    <p>The simple building Web apps with ASP.NET Core.</p>
+    <hr />
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("NewGame", "Game")'">Play Sudoku</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    @*<button type="button" class="bigbutton" onclick="location.href='@Url.Action("CreatePuzzleSetup", "Builder")'">Build a Board</button>*@
+    <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("LoadGame", "Game")'">Load Saved Game</button>
+</div>

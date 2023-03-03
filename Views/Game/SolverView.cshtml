@@ -1,0 +1,64 @@
+﻿@using DevExtreme.AspNet.Mvc;
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7">
+            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Home")'">Home</button>
+            @(Html.DevExtreme().DataGrid()
+                .ID("gridContainer")
+                .DataSource(d => d
+                .OData()
+                .Url("/Game/GetData")
+                    )
+                    .RemoteOperations(false)
+                    .AllowColumnReordering(true)
+                    .RowAlternationEnabled(true)
+                    .ShowBorders(true)
+                    .Paging(p => p.PageSize(10))
+                    .Pager(p => p
+                    .ShowPageSizeSelector(true)
+                    .AllowedPageSizes(new[] { 10, 25, 50, 100 })
+                    )
+                    .SearchPanel(s => s
+                    .Visible(true)
+                    .HighlightCaseSensitive(true)
+                    )
+                    .GroupPanel(g => g.Visible(true))
+                    .Grouping(g => g.AutoExpandAll(false))
+                    .Columns(columns =>
+                    {
+                        columns.Add()
+                    .DataField("solveDate")
+                    .DataType(GridColumnDataType.Date);
+
+                        columns.Add()
+                    .DataField("sudokuResult")
+                    .DataType(GridColumnDataType.String);
+                    })
+                )
+            <div id="gridContainer"></div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //$("#gridContainer").dxList({
+            //    dataSource: new DevExpress.data.CustomStore({
+            //        key: "id",
+            //        loadMode: "raw", // omit in the DataGrid, TreeList, PivotGrid, and Scheduler
+            //        load: function () {
+            //            var d = $.Deferred();
+            //            return $.getJSON("/Game/GetData")
+            //                .done(function (result) {
+            //                    // You can process the response here
+            //                    d.resolve(result);
+            //                })
+            //                .fail(function () {
+            //                    throw "Data loading error";
+            //                });
+            //        }
+            //    })
+            //});
+        })
+    </script>
+}

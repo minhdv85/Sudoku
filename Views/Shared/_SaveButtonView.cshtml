@@ -1,0 +1,19 @@
+﻿@model MySudoku.Model.FullBoard
+
+<div>
+	@using (Html.BeginForm("SolveGame", "Game", FormMethod.Post, new { name = "saveForm", autocomplete = "off" }))
+	{
+		for (int i = 0; i < Model.BoardList.Count; i++)
+		{
+			@Html.HiddenFor(m => m.BoardList[i].Value)
+			@Html.HiddenFor(m => m.BoardList[i].XCoordinate)
+			@Html.HiddenFor(m => m.BoardList[i].YCoordinate)
+			@Html.HiddenFor(m => m.BoardList[i].BlockNumber)
+		}
+		@Html.HiddenFor(m => m.BoardNumber)
+
+		<button type="button" class="btn btn-danger" name="action" onclick="document.saveForm.submit()">Solve Game</button>
+
+		<br />
+	}
+</div>

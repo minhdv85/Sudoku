@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Views\Builder\**" />
+    <Content Remove="Views\Builder\**" />
+    <EmbeddedResource Remove="Views\Builder\**" />
+    <None Remove="Views\Builder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Code\IPuzzleSaver.cs" />
+    <Compile Remove="Code\XDocPuzzleSaver.cs" />
+    <Compile Remove="Controllers\BuilderController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Game\_ResetButtonView.cshtml" />
+    <Content Remove="Views\Shared\_BoardView.cshtml" />
+    <Content Remove="Views\Shared\_StatusView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Code\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.0" />
+    <PackageReference Include="jQuery" Version="3.6.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
+</Project>
