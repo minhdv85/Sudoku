@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-7">
             <div>
-
+                <p class="text-danger">@Model.Status</p>
                 @using (Html.BeginForm("UpdateGame", "Game", FormMethod.Post, new { name = "updateForm", autocomplete = "off" }))
                 {
                     int boardSize = Model.BoardSize;
@@ -48,7 +48,13 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade bd-example-modal-lg" id="mdloading" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 48px">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script>
         function SubmitValidCellValue(event) {
@@ -61,6 +67,10 @@
             }
         }
         $(document).ready(function () {
+            $("#btnSolve").on('click', function (e) {
+                $("#mdloading").modal("show");
+                document.saveForm.submit()
+            });
             $("#btnsave").on('click', function (e) {
 
                 e.preventDefault(); // avoid to execute the actual submit of the form.

@@ -35,16 +35,25 @@ namespace MVCSuDoku4.Controllers
 
             return View("GameView", board);
         }
-
+        public IActionResult UpdateGame(FullBoard board)
+        {
+            if (!IsValid(board.BoardList))
+            {
+                board.Status = PuzzleStatus.Invalid;
+            }
+            else if (board.BoardList.All(c => c.Value.HasValue))
+            {
+                board.Status = PuzzleStatus.Complete;
+            }
+            board.BoardSize = Constants.BoardSize;
+            board.BlockSize = Constants.BlockSize;
+            return View("GameView", board);
+        }
         public ActionResult SolveGame(FullBoard board)
         {
             ProblemSolver(board);
             board.BoardSize = Constants.BoardSize;
             board.BlockSize = Constants.BlockSize;
-            int puzzleNumber;
-            puzzleLoader.LoadNewPuzzle(board.BoardList, out puzzleNumber);
-            board.BoardNumber = puzzleNumber;
-
             return View("GameView", board);
         }
         public async Task<JsonResult> Save(FullBoard board)
@@ -90,7 +99,7 @@ namespace MVCSuDoku4.Controllers
                         if(IsValid(board.BoardList))
                         {
                             board.BoardList[i].Value = j;
-                            //break;
+                            // break;
                             if (ProblemSolver(board))
                                 return true;
                             else
@@ -103,7 +112,7 @@ namespace MVCSuDoku4.Controllers
             return true;
         }
 
-        public  bool IsValid(List<Cell> cellList)
+        public bool IsValid(List<Cell> cellList)
         {
             bool isValid = AreRowsValid(cellList);
             isValid &= AreColumnsValid(cellList);
@@ -121,7 +130,7 @@ namespace MVCSuDoku4.Controllers
             return isValid;
         }
 
-        private  bool AreColumnsValid(List<Cell> cellList)
+        private bool AreColumnsValid(List<Cell> cellList)
         {
             bool isValid = true;
 
@@ -130,7 +139,7 @@ namespace MVCSuDoku4.Controllers
             return isValid;
         }
 
-        private  bool AreBlocksValid(List<Cell> cellList)
+        private bool AreBlocksValid(List<Cell> cellList)
         {
             bool isValid = true;
 
@@ -143,26 +152,26 @@ namespace MVCSuDoku4.Controllers
             // Validate that each non-NULL value in this group is unique.  Ignore NULL values.
             return cellGroup.Where(c => c.Value.HasValue).GroupBy(c => c.Value.Value).All(g => g.Count() <= 1);
         }
-        //public bool isVaild(List<Cell> cells, int x, int y, int vals)
-        //{
-        //    for (int i = 1; i <= 9; i++)
-        //    {
-        //        var row = cells.Where(c => c.XCoordinate == i && c.YCoordinate == y);
-        //        //check row
-        //        if (row.Any(x => x.Value != null) && row.Any(x => x.Value == vals))
-        //            return false;
-        //        var col = cells.Where(c => c.XCoordinate == x && c.YCoordinate == i);
-        //        //check col
-        //        if (col.Any(x => x.Value != null) && col.Any(c => c.Value == vals))
-        //            return false;
-        //        //check block
-        //        var _x = 3 * (x / 3) + i / 3;
-        //        var _y = 3 * (y / 3) + i % 3;
-        //        var block = cells.Where(c => c.XCoordinate == _x && c.YCoordinate == _y);
-        //        if (block.Any(x => x.Value != null) && block.Any(x => x.Value == vals))
-        //            return false;
-        //    }
-        //    return true;
-        //}
+        public bool isVaild(List<Cell> cells, int x, int y, int vals)
+        {
+            for (int i = 1; i <= 9; i++)
+            {
+                var row = cells.Where(c => c.XCoordinate == i && c.YCoordinate == y);
+                //check row
+                if (row.Any(x => x.Value != null) && row.Any(x => x.Value == vals))
+                    return false;
+                var col = cells.Where(c => c.XCoordinate == x && c.YCoordinate == i);
+                //check col
+                if (col.Any(x => x.Value != null) && col.Any(c => c.Value == vals))
+                    return false;
+                //check block
+                var _x = 3 * (x / 3) + i / 3;
+                var _y = 3 * (y / 3) + i % 3;
+                var block = cells.Where(c => c.XCoordinate == _x && c.YCoordinate == _y);
+                if (block.Any(x => x.Value != null) && block.Any(x => x.Value == vals))
+                    return false;
+            }
+            return true;
+        }
     }
 }
